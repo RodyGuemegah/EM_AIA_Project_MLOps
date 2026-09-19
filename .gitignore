@@ -7,6 +7,6 @@ __pycache__/
 .env
 
 # Artefacts de modèle : jamais dans Git
-models/
+/models/
 mlruns/
 *.joblib
