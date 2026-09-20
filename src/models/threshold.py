@@ -36,19 +36,16 @@ DELAI_INTERVENTION = 3
 # Vie moyenne mesurée sur FD001 (médiane 199, moyenne ~206 cycles).
 VIE_MOYENNE = 206
 
+# Résultat mesuré par chercher_seuil() sur FD001, jeu d'examen de 20 moteurs.
+# Valeur retenue en production. Recalculer après tout réentraînement.
+SEUIL_RETENU = 10
+
 SEUILS = range(1, 61)
 RATIOS_SENSIBILITE = [1, 2, 5, 10, 20, 50]
 
 
 def simuler_politique(test: pd.DataFrame, pred, seuil: int) -> dict:
-    """Applique la politique d'alerte à chaque moteur et compte les issues.
 
-    Pour un moteur : on cherche le PREMIER vol où la prédiction passe sous
-    le seuil. À cet instant, on lit le RUL réel.
-      - jamais d'alerte            -> panne ratée
-      - alerte trop tardive        -> panne ratée en pratique
-      - alerte à temps             -> dépose planifiée, RUL réel vols gâchés
-    """
     d = test.assign(_pred=pred)
     ratees = deposes = vols_gaches = 0
 
@@ -72,10 +69,7 @@ def simuler_politique(test: pd.DataFrame, pred, seuil: int) -> dict:
 
 
 def cout_total(res: dict, cout_aog=COUT_AOG, cout_depose=COUT_DEPOSE) -> float:
-    """Coût de la politique. Trois termes, dont celui de la vie gâchée.
 
-    Gâcher une vie entière (206 vols) revient à payer une dépose de plus.
-    """
     cout_par_vol = cout_depose / VIE_MOYENNE
     return (res["ratees"] * cout_aog
             + res["deposes"] * cout_depose
@@ -93,11 +87,7 @@ def chercher_seuil(test, pred, cout_aog=COUT_AOG) -> pd.DataFrame:
 
 
 def sensibilite(test, pred) -> pd.DataFrame:
-    """Le seuil optimal résiste-t-il à l'incertitude sur les coûts ?
 
-    On ne prétend pas connaître le coût exact d'un AOG. On montre que la
-    décision n'en dépend pas — c'est plus solide qu'un chiffre affirmé.
-    """
     lignes = []
     for ratio in RATIOS_SENSIBILITE:
         tab = chercher_seuil(test, pred, cout_aog=ratio * COUT_DEPOSE)

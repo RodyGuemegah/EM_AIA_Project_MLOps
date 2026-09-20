@@ -48,29 +48,13 @@ def load_data(subset="FD001"):
     return train, test, features 
 
 def train_model(train, features):
-    """Entraîne XGBoost. Deux lignes, l'essentiel est ailleurs.
-
-    XGBoost construit des arbres SUCCESSIFS : chacun corrige les erreurs
-    du précédent. D'où le nom « boosting ». C'est ce qui lui permet de
-    modéliser une dégradation non linéaire, là où la régression linéaire
-    ne pouvait tracer qu'une droite.
-    """
+    
     model = XGBRegressor(**PARAMS)
     model.fit(train[features], train["rul"])
     return model
 
 def evaluate(model, test, features, temoin_rmse=21.98):
-    """Évalue sur les 20 moteurs d'examen et compare au témoin.
-
-    Deux niveaux de lecture :
-      - les métriques globales, pour comparer les modèles entre eux
-      - l'erreur PAR PROXIMITÉ DE LA PANNE, qui est la seule qui
-        intéresse le métier
-
-    Une erreur de 15 cycles sur un moteur qui en a 120 devant lui est sans
-    conséquence. La même erreur à 10 cycles de la panne est un vol de trop.
-    La moyenne globale mélange ces deux situations.
-    """
+    
     pred = model.predict(test[features])
     reel = test["rul"].to_numpy()
 

@@ -10,3 +10,6 @@ __pycache__/
 /models/
 mlruns/
 *.joblib
+
+mlflow.db
+mlartifacts/

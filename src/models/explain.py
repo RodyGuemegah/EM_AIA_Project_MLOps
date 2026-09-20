@@ -41,13 +41,7 @@ N_ECHANTILLON = 2000           # borne le calcul, sans changer la conclusion
 
 
 def load_data():
-    """Rejoue EXACTEMENT le découpage de l'entraînement.
 
-    Même graine, même test_size : les 20 moteurs d'examen ici sont les
-    20 moteurs d'examen de xgboost_model. Sans cela, on expliquerait le
-    modèle sur des moteurs qu'il a vus pendant son apprentissage — et les
-    contributions seraient flatteuses et fausses.
-    """
     bundle = joblib.load(MODEL_PATH)
     df = load_silver(subset=bundle["subset"], split="train")
     _, test = split_par_moteur(df, test_size=0.2, seed=SEED)
@@ -55,12 +49,7 @@ def load_data():
 
 
 def calculate(model, test, features):
-    """Calcule les valeurs de Shapley sur le jeu d'examen.
 
-    On échantillonne au-delà de N_ECHANTILLON lignes : les contributions
-    moyennes se stabilisent bien avant. `random_state` fixé pour que la
-    figure de soutenance soit reproductible à l'identique.
-    """
     X = test[features]
     if len(X) > N_ECHANTILLON:
         X = X.sample(N_ECHANTILLON, random_state=SEED)
@@ -70,12 +59,7 @@ def calculate(model, test, features):
 
 
 def figure_globale(valeurs):
-    """Les capteurs classés par contribution moyenne absolue.
 
-    ABSOLUE : on veut l'INFLUENCE, pas le sens. Un capteur qui tire la
-    prédiction vers le haut chez certains moteurs et vers le bas chez
-    d'autres est très influent ; sa moyenne signée serait pourtant nulle.
-    """
     FIGURES.mkdir(parents=True, exist_ok=True)
 
     shap.plots.bar(valeurs, max_display=15, show=False)
@@ -96,12 +80,7 @@ def figure_globale(valeurs):
 
 
 def figure_locale(valeurs, X, model, features):
-    """Explique le moteur le PLUS PROCHE DE LA PANNE selon le modèle.
 
-    Ce n'est pas un cas pris au hasard : c'est précisément le vol qui
-    déclencherait l'alerte du seuil. La figure répond donc à la question
-    que posera le mécanicien le jour où l'alerte sonne.
-    """
     i = int(model.predict(X).argmin())     # position, pas index pandas
 
     shap.plots.waterfall(valeurs[i], max_display=12, show=False)
