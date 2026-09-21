@@ -55,7 +55,6 @@ def evaluer(subset, model, features):
     if subset == "FD001":
         _, df = split_par_moteur(df, test_size=0.2, seed=SEED)
 
-    # Dérive de SCHÉMA. reindex aligne sur les colonnes attendues et
     # crée en NaN celles qui manquent. XGBoost les traite nativement :
     # chaque nœud a appris une direction par défaut pour les manquants.
     manquantes = [f for f in features if f not in df.columns]
