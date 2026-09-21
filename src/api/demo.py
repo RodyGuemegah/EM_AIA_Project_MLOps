@@ -34,22 +34,18 @@ def main():
     }
 
     for title, ligne in cas.items():
-       res = calling(ligne, features)
-       print(f"\n{'=' * 58}\n{title}\n{'=' * 58}")
-       print(f"RUL réel      : {ligne.rul:.0f} vols   ← la vérité terrain")
-       print(f"RUL prédit    : {res['rul_estime']} vols")
-       print(f"Alerte        : {'OUI' if res['alerte'] else 'non'} "
+        res = calling(ligne, features)
+        print(f"\n{'=' * 58}\n{title}\n{'=' * 58}")
+        print(f"RUL réel      : {ligne.rul:.0f} vols   ← la vérité terrain")
+        print(f"RUL prédit    : {res['rul_estime']} vols")
+        print(f"Alerte        : {'OUI' if res['alerte'] else 'non'} "
               f"(seuil {res['seuil']})")
-       print(f"Modèle        : version {res['modele_version']}")
-       if res["causes"]:
+        print(f"Modèle        : version {res['modele_version']}")
+        if res["causes"]:
             print("Causes principales :")
             for c in res["causes"]:
-               sens = "raccourcit" if c["contribution"] < 0 else "prolonge"
-    print(f"   {c['capteur']:<24}{c['contribution']:>8.2f}v  ({sens})")
-
-    print(f"\nJSON brut du premier cas :")
-    print(json.dumps(calling(cas['MOTEUR EN FIN DE VIE'], features),
-                     indent=2, ensure_ascii=False))
+                sens = "raccourcit" if c["contribution"] < 0 else "prolonge"
+                print(f"   {c['capteur']:<24}{c['contribution']:>8.2f}v  ({sens})")
 
 
 if __name__ == "__main__":

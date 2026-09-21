@@ -23,18 +23,18 @@ import mlflow.xgboost
 import numpy as np
 import pandas as pd
 import shap
+import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from src.models.threshold import SEUIL_RETENU
-
-TRACKING_URI = "http://127.0.0.1:5000"
-MODELE = "rul-xgboost"
-ALIAS = "production"
+from src.config import MODELE, ALIAS, SEUIL_RETENU
+# Dans un conteneur, 127.0.0.1 désigne le conteneur lui-même,
+# L'adresse doit donc être injectable de l'extérieur.
+TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5001")
 N_CAUSES = 3                    # nombre de capteurs remontés au mécanicien
 
 # Rempli au démarrage par lifespan(). Un dict plutôt que des globales
-# séparées : on voit d'un coup d'œil tout ce que l'API garde en mémoire.
+# séparées : on voit tout ce que l'API garde en mémoire.
 ETAT: dict = {}
 
 
@@ -118,9 +118,8 @@ def modele():
 def predict(req: Requete):
     features = ETAT["features"]
 
-    # Échouer vite et clairement. Une feature manquante silencieusement
+    # Échouer vite et clairement. Une feature manquante
     # remplacée par zéro produirait une prédiction plausible et fausse —
-    # le pire des cas pour un système d'aide à la décision.
     manquantes = [f for f in features if f not in req.mesures]
     if manquantes:
         raise HTTPException(

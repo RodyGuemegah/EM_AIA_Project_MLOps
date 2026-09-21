@@ -19,6 +19,7 @@ de potentiel payé.
 """
 
 from __future__ import annotations
+from src.config import SEUIL_RETENU
 
 import numpy as np
 import pandas as pd
@@ -35,10 +36,6 @@ DELAI_INTERVENTION = 3
 
 # Vie moyenne mesurée sur FD001 (médiane 199, moyenne ~206 cycles).
 VIE_MOYENNE = 206
-
-# Résultat mesuré par chercher_seuil() sur FD001, jeu d'examen de 20 moteurs.
-# Valeur retenue en production. Recalculer après tout réentraînement.
-SEUIL_RETENU = 10
 
 SEUILS = range(1, 61)
 RATIOS_SENSIBILITE = [1, 2, 5, 10, 20, 50]

@@ -18,6 +18,7 @@ modèle      : versionné dans le REGISTRE, avec sa signature d'entrée.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import mlflow
@@ -27,8 +28,13 @@ from mlflow.models import infer_signature
 from src.models.xgboost_model import PARAMS, evaluate, load_data, train_model
 from src.models.threshold import chercher_seuil
 
-TRACKING_URI = "http://127.0.0.1:5000"
-EXPERIENCE = "rul-moteur"          # le classeur
+# Port 5001 et non 5000 : sur macOS, le Récepteur AirPlay occupe déjà
+# 5000. Le serveur MLflow démarre quand même sur 127.0.0.1 — c'est le
+# piège — mais localhost:5000 répond alors 403 depuis AirPlay.
+# Même variable d'environnement que l'API : une seule adresse à changer
+# pour basculer tout le projet vers un serveur distant.
+TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5001")
+EXPERIENCE = "rul-moteur-v2"          # le classeur
 MODELE = "rul-xgboost"             # le nom dans le registre
 FIGURES = Path("docs/figures")
 TABLE_SEUILS = Path("docs/seuils_couts.csv")

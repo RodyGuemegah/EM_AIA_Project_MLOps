@@ -1,0 +1,11 @@
+# Dépendances du SERVICE uniquement — pas de l'entraînement.
+# mlflow-skinny est le client sans l'interface web ni le serveur :
+# l'API lit le registre, elle ne l'héberge pas.
+fastapi>=0.115
+uvicorn[standard]>=0.32
+pydantic>=2.9
+pandas>=2.2
+numpy>=1.26
+xgboost>=2.1
+shap>=0.46
+mlflow-skinny>=2.16
