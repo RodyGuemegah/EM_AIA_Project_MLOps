@@ -1,0 +1,20 @@
+# Outillage du projet. La configuration de lint est versionnée pour que
+# `ruff check .` rende le même verdict chez tout le monde : sans elle,
+# le résultat dépend de la version de ruff installée localement.
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+extend-exclude = ["mlartifacts", "models"]
+
+[tool.ruff.lint]
+# E4/E7/E9 + F : le jeu par défaut de ruff — erreurs pycodestyle utiles
+# et analyse pyflakes (imports morts, variables non définies).
+# I : tri des imports. Il évite les diffs de pur réordonnancement, qui
+# noient les vraies modifications lors d'une relecture.
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.isort]
+# Sans cela, `src` est pris pour une dépendance tierce et se retrouve
+# groupé avec pandas ou mlflow.
+known-first-party = ["src"]

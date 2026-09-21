@@ -25,8 +25,8 @@ import mlflow
 import mlflow.xgboost
 from mlflow.models import infer_signature
 
-from src.models.xgboost_model import PARAMS, evaluate, load_data, train_model
 from src.models.threshold import chercher_seuil
+from src.models.xgboost_model import PARAMS, evaluate, load_data, train_model
 
 # Port 5001 et non 5000 : sur macOS, le Récepteur AirPlay occupe déjà
 # 5000. Le serveur MLflow démarre quand même sur 127.0.0.1 — c'est le

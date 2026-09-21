@@ -16,6 +16,7 @@ validée hors ligne, pas un paramètre d'inférence.
 
 from __future__ import annotations
 
+import os
 from contextlib import asynccontextmanager
 
 import mlflow
@@ -23,11 +24,11 @@ import mlflow.xgboost
 import numpy as np
 import pandas as pd
 import shap
-import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from src.config import MODELE, ALIAS, SEUIL_RETENU
+from src.config import ALIAS, MODELE, SEUIL_RETENU
+
 # Dans un conteneur, 127.0.0.1 désigne le conteneur lui-même,
 # L'adresse doit donc être injectable de l'extérieur.
 TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5001")

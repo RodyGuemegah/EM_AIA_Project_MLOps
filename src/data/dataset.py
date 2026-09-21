@@ -10,6 +10,7 @@ from __future__ import annotations
 import pandas as pd
 import pyarrow.parquet as pq
 from sklearn.model_selection import GroupShuffleSplit
+
 from src.storage import get_lake_filesystem, lake_path
 
 DATASET = "engine_features"

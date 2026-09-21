@@ -16,13 +16,14 @@ C'est un avantage face à la régression linéaire, dont les coefficients
 
 from __future__ import annotations
 
-from datetime import datetime, timezone 
+from datetime import datetime, timezone
 from pathlib import Path
 
 import joblib
 import numpy as np
-from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 from xgboost import XGBRegressor
+
 from src.data.dataset import SEED, load_silver, select_features, split_par_moteur
 
 MODEL_PATH = Path("models/xgboost.joblib")

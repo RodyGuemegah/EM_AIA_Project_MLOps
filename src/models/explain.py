@@ -29,6 +29,7 @@ from pathlib import Path
 
 import joblib
 import matplotlib
+
 matplotlib.use("Agg")          # pas d'affichage : on écrit des fichiers
 import matplotlib.pyplot as plt
 import shap

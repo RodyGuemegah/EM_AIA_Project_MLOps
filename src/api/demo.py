@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import json
-
 import requests
 
-from src.data.dataset import load_silver, split_par_moteur, SEED
+from src.data.dataset import SEED, load_silver, split_par_moteur
 
 API = "http://127.0.0.1:8000"
 

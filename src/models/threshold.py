@@ -19,9 +19,7 @@ de potentiel payé.
 """
 
 from __future__ import annotations
-from src.config import SEUIL_RETENU
 
-import numpy as np
 import pandas as pd
 
 # Coûts en dollars. Sources et hypothèses : docs/adr/ADR-seuil.md
@@ -95,7 +93,8 @@ def sensibilite(test, pred) -> pd.DataFrame:
 
 if __name__ == "__main__":
     import joblib
-    from src.models.xgboost_model import load_data, MODEL_PATH
+
+    from src.models.xgboost_model import MODEL_PATH, load_data
 
     paquet = joblib.load(MODEL_PATH)
     _, test, _ = load_data()
