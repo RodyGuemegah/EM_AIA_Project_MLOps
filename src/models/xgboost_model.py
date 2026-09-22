@@ -54,7 +54,7 @@ def train_model(train, features):
     model.fit(train[features], train["rul"])
     return model
 
-def evaluate(model, test, features, temoin_rmse=21.98):
+def evaluate(model, test, features, temoin_rmse=21.98, nom="XGBoost"):
     
     pred = model.predict(test[features])
     reel = test["rul"].to_numpy()
@@ -64,7 +64,7 @@ def evaluate(model, test, features, temoin_rmse=21.98):
 
     print(f"{'':22}{'RMSE':>8}{'MAE':>8}")
     print(f"{'Témoin (linéaire)':<22}{temoin_rmse:>8.2f}{'':>8}")
-    print(f"{'XGBoost':<22}{rmse:>8.2f}{mae:>8.2f}")
+    print(f"{nom:<22}{rmse:>8.2f}{mae:>8.2f}")
     print(f"{'Gain':<22}{temoin_rmse - rmse:>+8.2f}"
           f"  ({100 * (temoin_rmse - rmse) / temoin_rmse:+.0f} %)")
 

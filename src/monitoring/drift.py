@@ -20,7 +20,6 @@ permette d'arbitrer un réentraînement.
 """
 
 from __future__ import annotations
-
 import mlflow
 import mlflow.xgboost
 import numpy as np
@@ -46,14 +45,11 @@ def charger_modele():
     return model, list(model.get_booster().feature_names)
 
 
-def evaluer(subset, model, features):
-    df = load_silver(subset=subset, split="train")
-
-    # Sur FD001, on garde le jeu d'EXAMEN : le modèle a vu les 80 autres
-    # moteurs, les inclure gonflerait artificiellement la référence.
-    # Sur FD003 et FD004, tout est inconnu : on prend l'intégralité.
-    if subset == "FD001":
-        _, df = split_par_moteur(df, test_size=0.2, seed=SEED)
+def evaluer(subset, model, features, seuil=SEUIL_RETENU, df=None):
+    if df is None:
+        df = load_silver(subset=subset, split="train")
+        if subset == "FD001":
+            _, df = split_par_moteur(df, test_size=0.2, seed=SEED)
 
     # crée en NaN celles qui manquent. XGBoost les traite nativement :
     # chaque nœud a appris une direction par défaut pour les manquants.
@@ -65,7 +61,7 @@ def evaluer(subset, model, features):
 
     # Dérive de DÉCISION, au seuil calibré sur FD001. C'est le point
     # central : on n'a pas le droit de recalibrer avant d'avoir constaté.
-    res = simuler_politique(df, pred, SEUIL_RETENU)
+    res = simuler_politique(df, pred, seuil=seuil)
     n_moteurs = df.engine_id.nunique()
 
     # Le coût doit être ramené AU MOTEUR : FD001 compte 20 moteurs
