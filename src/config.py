@@ -4,13 +4,13 @@ Isolées ici pour que l'API n'ait pas à importer le pipeline de données
 uniquement pour connaître un seuil. Un module de configuration n'importe
 rien : c'est ce qui lui permet d'être importé par tout le monde.
 """
+from __future__ import annotations
 
-# Résultat mesuré par threshold.chercher_seuil() sur FD001, 20 moteurs
-# d'examen. Voir ADR 0001. À recalculer après tout réentraînement.
 import os
 
-
-SEUIL_RETENU = 10
+# Recalculé après le réentraînement FD001+FD003 (ADR 0007).
+# Ancienne valeur : 10, pour le modèle FD001 seul.import os
+SEUIL_RETENU = 14
 
 MODELE = "rul-xgboost"
 ALIAS = "production"

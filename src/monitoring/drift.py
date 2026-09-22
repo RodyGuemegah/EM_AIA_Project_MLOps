@@ -20,6 +20,7 @@ permette d'arbitrer un réentraînement.
 """
 
 from __future__ import annotations
+
 import mlflow
 import mlflow.xgboost
 import numpy as np

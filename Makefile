@@ -9,7 +9,7 @@ MLFLOW := .venv/bin/mlflow
 MLFLOW_PORT ?= 5001
 export MLFLOW_TRACKING_URI := http://127.0.0.1:$(MLFLOW_PORT)
 
-.PHONY: mlflow train api port
+.PHONY: mlflow train api port docker-build docker-run lint test
 
 ## Serveur de suivi + registre. À laisser tourner dans son propre terminal.
 mlflow:
@@ -43,3 +43,11 @@ docker-run:
 	  --add-host=host.docker.internal:host-gateway \
 	  -e MLFLOW_TRACKING_URI=http://host.docker.internal:$(MLFLOW_PORT) \
 	  --name rul-api safran-api:1.0
+
+## Qualité de code. Avant les tests : un import mort se voit.
+lint:
+	.venv/bin/ruff check src tests
+
+## Suite de tests hors-ligne — ne nécessite ni MinIO ni MLflow.
+test:
+	$(PY) -m pytest -q
