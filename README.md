@@ -7,6 +7,8 @@ Elle réunit quatre briques en une seule réponse : le modèle (XGBoost),
 le registre (MLflow), la décision (seuil par matrice de coûts) et
 l'explication (SHAP).
 
+  > Déploiement complet des deux dépôts : voir `safran-data-platform/docs/guide_deploiement.md`
+
 ## Prérequis
 
 | Élément | Détail |
